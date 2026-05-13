@@ -44,10 +44,42 @@ db.ForeignKey("products.product_id"), nullable=False)
 def home():
     return render_template("index.html")
 
-@app.route("/products")
+@app.route("/products", methods=["GET", "POST"])
 def products():
-    return render_template("products.html")
 
+    if request.method == "POST":
+
+        product_name = request.form["product_name"]
+        price = request.form["price"]
+        quantity = request.form["quantity"]
+        category_id = request.form["category_id"]
+
+        if (
+            product_name.strip() != ""
+            and float(price) >= 0
+            and int(quantity) >= 0
+        ):
+
+            new_product = Product(
+                product_name=product_name,
+                price=float(price),
+                quantity=int(quantity),
+                category_id=int(category_id)
+            )
+
+            db.session.add(new_product)
+            db.session.commit()
+
+        return redirect("/products")
+
+    all_products = Product.query.all()
+    all_categories = Category.query.all()
+
+    return render_template(
+        "products.html",
+        products=all_products,
+        categories=all_categories
+    )
 
 @app.route("/categories", methods=["GET", "POST"])
 def categories():
