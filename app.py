@@ -126,7 +126,32 @@ def delete_category(category_id):
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+
+    total_products = Product.query.count()
+
+    total_categories = Category.query.count()
+
+    total_inventory = db.session.query(
+        db.func.sum(Product.quantity)
+    ).scalar()
+
+    average_price = db.session.query(
+        db.func.avg(Product.price)
+    ).scalar()
+
+    if total_inventory is None:
+        total_inventory = 0
+
+    if average_price is None:
+        average_price = 0
+
+    return render_template(
+        "dashboard.html",
+        total_products=total_products,
+        total_categories=total_categories,
+        total_inventory=total_inventory,
+        average_price=round(average_price, 2)
+    )
 
 if __name__ == "__main__":
     with app.app_context():
