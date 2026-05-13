@@ -104,6 +104,14 @@
 
             <td>{{ product.category.category_name }}</td>
 		<td>
+
+		<a
+    href="/edit_product/{{ product.product_id }}"
+    class="btn btn-primary btn-sm me-2"
+>
+    Edit
+</a>
+
    		 <a
        			 href="/delete_product/{{ product.product_id }}"
        			 class="btn btn-danger btn-sm"

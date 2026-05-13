@@ -120,6 +120,33 @@ def restock_product(product_id):
 
     return redirect("/products")
 
+@app.route("/edit_product/<int:product_id>", methods=["GET", "POST"])
+def edit_product(product_id):
+
+    product = Product.query.get_or_404(product_id)
+
+    categories = Category.query.all()
+
+    if request.method == "POST":
+
+        product.product_name = request.form["product_name"]
+
+        product.price = float(request.form["price"])
+
+        product.quantity = int(request.form["quantity"])
+
+        product.category_id = int(request.form["category_id"])
+
+        db.session.commit()
+
+        return redirect("/products")
+
+    return render_template(
+        "edit_product.html",
+        product=product,
+        categories=categories
+    )
+
 @app.route("/categories", methods=["GET", "POST"])
 def categories():
 
