@@ -27,7 +27,7 @@ class Product(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     category_id = db.Column(db.Integer, 
 db.ForeignKey("categories.category_id"), nullable=False)
-
+logs = db.relationship("InventoryLog", backref="product", lazy=True)
 
 class InventoryLog(db.Model):
     __tablename__ = "inventory_logs"
@@ -88,6 +88,35 @@ def delete_product(product_id):
 
     db.session.delete(product)
     db.session.commit()
+
+    return redirect("/products")
+
+@app.route("/restock/<int:product_id>", methods=["POST"])
+def restock_product(product_id):
+
+    product = Product.query.get_or_404(product_id)
+
+    amount = int(request.form["amount"])
+
+    if amount > 0:
+
+        try:
+
+            product.quantity += amount
+
+            new_log = InventoryLog(
+                product_id=product.product_id,
+                change_amount=amount,
+                note="Product restocked"
+            )
+
+            db.session.add(new_log)
+
+            db.session.commit()
+
+        except:
+
+            db.session.rollback()
 
     return redirect("/products")
 

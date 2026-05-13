@@ -83,6 +83,7 @@
             <th>Quantity</th>
             <th>Category</th>
             <th>Actions</th>
+	    <th>Restock</th>
         </tr>
 
     </thead>
@@ -110,6 +111,32 @@
        			 Delete
    		 </a>
 		</td>
+<td>
+
+    <form
+        method="POST"
+        action="/restock/{{ product.product_id }}"
+        class="d-flex"
+    >
+
+        <input
+            type="number"
+            name="amount"
+            class="form-control me-2"
+            min="1"
+            required
+        >
+
+        <button
+            type="submit"
+            class="btn btn-warning btn-sm"
+        >
+            Restock
+        </button>
+
+    </form>
+
+</td>
         </tr>
 
         {% endfor %}
