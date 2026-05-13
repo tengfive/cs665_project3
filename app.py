@@ -81,6 +81,16 @@ def products():
         categories=all_categories
     )
 
+@app.route("/delete_product/<int:product_id>")
+def delete_product(product_id):
+
+    product = Product.query.get_or_404(product_id)
+
+    db.session.delete(product)
+    db.session.commit()
+
+    return redirect("/products")
+
 @app.route("/categories", methods=["GET", "POST"])
 def categories():
 
@@ -104,6 +114,15 @@ def categories():
         categories=all_categories
     )
 
+@app.route("/delete_category/<int:category_id>")
+def delete_category(category_id):
+
+    category = Category.query.get_or_404(category_id)
+
+    db.session.delete(category)
+    db.session.commit()
+
+    return redirect("/categories")
 
 @app.route("/dashboard")
 def dashboard():
