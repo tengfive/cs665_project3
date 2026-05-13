@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">Categories</h1>
+
+<form method="POST" class="mb-4">
+
+    <div class="mb-3">
+        <label class="form-label">Category Name</label>
+
+        <input
+            type="text"
+            name="category_name"
+            class="form-control"
+            required
+        >
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Add Category
+    </button>
+
+</form>
+
+<hr>
+
+<h3>Current Categories</h3>
+
+<ul class="list-group">
+
+    {% for category in categories %}
+
+    <li class="list-group-item">
+        {{ category.category_name }}
+    </li>
+
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -44,6 +44,38 @@ db.ForeignKey("products.product_id"), nullable=False)
 def home():
     return render_template("index.html")
 
+@app.route("/products")
+def products():
+    return render_template("products.html")
+
+
+@app.route("/categories", methods=["GET", "POST"])
+def categories():
+
+    if request.method == "POST":
+
+        category_name = request.form["category_name"]
+
+        if category_name.strip() != "":
+
+            new_category = Category(category_name=category_name)
+
+            db.session.add(new_category)
+            db.session.commit()
+
+        return redirect("/categories")
+
+    all_categories = Category.query.all()
+
+    return render_template(
+        "categories.html",
+        categories=all_categories
+    )
+
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     with app.app_context():
